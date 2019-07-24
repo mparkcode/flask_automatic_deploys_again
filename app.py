@@ -6,7 +6,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    user = os.environ.get('USER')
+    password = os.environ.get('PASSWORD')
+    return render_template('index.html', user=user, password=password)
 
 @app.route('/about')
 def about():
