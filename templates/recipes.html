@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{type}} recipes</h1>
+    {% for recipe in recipes %}
+        <h2>{{ recipe.name }}</h2>
+        <p>{{ recipe.description }}</p>
+        <p>Ingredients:</p>
+        <ol>
+            {% for ingredient in recipe.ingredients %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+        </ol>
+    {% endfor %}
+    <script type="text/javascript" src="{{url_for('static', filename='hilitor.js')}}"></script>
+    <script type="text/javascript">
+        
+        var myHilitor = new Hilitor();
+        
+        myHilitor.apply('{{query}}')
+        
+    </script>
+    
+</body>
+</html>
