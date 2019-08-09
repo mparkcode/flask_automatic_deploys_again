@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 import pymongo
@@ -39,6 +39,27 @@ def search():
 def recipe_type(type):
     recipes=mongo.db.recipes.find({'category': type})
     return render_template('recipes.html', recipes=recipes, type=type)
+    
+@app.route('/cooked_recipes')
+def cooked_recipes():
+    recipes = mongo.db.recipes.find({'cooked': True})
+    return render_template('cooked_uncooked.html', recipes=recipes, type='cooked')
+    
+@app.route('/uncooked_recipes')
+def uncooked_recipes():
+    recipes = mongo.db.recipes.find({'cooked': False})
+    return render_template('cooked_uncooked.html', recipes=recipes, type='uncooked')
+    
+@app.route('/toggle_cooked/<recipe_id>', methods=['POST'])
+def toggle_cooked(recipe_id):
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    mongo.db.recipes.update({"_id": ObjectId(recipe_id)},{
+        'name': recipe['name'],
+        'description': recipe['description'],
+        'ingredients': recipe['ingredients'],
+        'cooked': not recipe['cooked']
+    })
+    return redirect(request.referrer)
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),

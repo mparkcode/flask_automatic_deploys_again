@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{type}} recipes</h1>
+    {% for recipe in recipes %}
+        <h2>{{ recipe.name }}</h2>
+        <p>{{ recipe.description }}</p>
+        <p>Ingredients:</p>
+        <ol>
+            {% for ingredient in recipe.ingredients %}
+            <li>{{ingredient}}</li>
+            {% endfor %}
+        </ol>
+        <form action="{{url_for('toggle_cooked', recipe_id=recipe._id)}}" method="POST">
+            <input type="submit" value="{% if recipe.cooked %}I haven't cooked this yet{% else %}I've cooked this{% endif %}"/>
+        </form>
+    {% endfor %}
+    {% if url_for(request.endpoint) == '/cooked_recipes' %}
+        <a href="{{url_for('uncooked_recipes')}}">View recipes I haven't cooked</a>
+    {% else %}
+        <a href="{{url_for('cooked_recipes')}}">View recipes I've cooked</a>
+    {% endif %}
+    
+    
+</body>
+</html>
